@@ -106,6 +106,9 @@
       "path": "packages/navigator"
     },
     {
+      "path": "packages/notebook"
+    },
+    {
       "path": "packages/outline-view"
     },
     {
