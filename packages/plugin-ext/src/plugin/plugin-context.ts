@@ -236,6 +236,7 @@ import { Endpoint } from '@theia/core/lib/browser/endpoint';
 import { FilePermission } from '@theia/filesystem/lib/common/files';
 import { TabsExtImpl } from './tabs';
 import { LocalizationExtImpl } from './localization-ext';
+import { NotebooksExtImpl } from './notebook/notebooks';
 
 export function createAPIFactory(
     rpc: RPCProtocol,
@@ -259,6 +260,7 @@ export function createAPIFactory(
     const notificationExt = rpc.set(MAIN_RPC_CONTEXT.NOTIFICATION_EXT, new NotificationExtImpl(rpc));
     const editors = rpc.set(MAIN_RPC_CONTEXT.TEXT_EDITORS_EXT, new TextEditorsExtImpl(rpc, editorsAndDocumentsExt));
     const documents = rpc.set(MAIN_RPC_CONTEXT.DOCUMENTS_EXT, new DocumentsExtImpl(rpc, editorsAndDocumentsExt));
+    const notebooksExt = rpc.set(MAIN_RPC_CONTEXT.NOTEBOOKS_EXT, new NotebooksExtImpl(rpc));
     const statusBarMessageRegistryExt = new StatusBarMessageRegistryExt(rpc);
     const terminalExt = rpc.set(MAIN_RPC_CONTEXT.TERMINAL_EXT, new TerminalServiceExtImpl(rpc));
     const outputChannelRegistryExt = rpc.set(MAIN_RPC_CONTEXT.OUTPUT_CHANNEL_REGISTRY_EXT, new OutputChannelRegistryExtImpl(rpc));
@@ -704,7 +706,7 @@ export function createAPIFactory(
                 return timelineExt.registerTimelineProvider(plugin, scheme, provider);
             },
             registerNotebookSerializer(notebookType: string, serializer: theia.NotebookSerializer, options?: theia.NotebookDocumentContentOptions): theia.Disposable {
-                return Disposable.NULL;
+                return notebooksExt.registerNotebookSerializer(plugin, notebookType, serializer, options);
             },
             get isTrusted(): boolean {
                 return workspaceExt.trusted;
